@@ -91,7 +91,7 @@ def runGame():
         if player_choice == 'hit':
 
             PlayerHand = hit(deck , PlayerHand)
-            print(PlayerHand)
+            print(f"your hand: {PlayerHand}")
             player_score = handCalculator(PlayerHand)
             print(f"Your current score: {player_score}")
 
@@ -104,7 +104,7 @@ def runGame():
                 print("BLACKJACK !!!")
                 print("Dealer's turn now!")
                 BotHand = hit(deck, BotHand)
-                print(f"dealer hand {BotHand}")
+                print(f"dealer hand: {BotHand}")
                 bot_score = handCalculator(BotHand)
                 print(bot_score)
                 PlayerTurn = False
@@ -113,7 +113,7 @@ def runGame():
         elif player_choice == 'stand':
             print("Dealer's turn now!")
             BotHand = hit(deck, BotHand)
-            print(BotHand)
+            print(f"dealer hand: {BotHand}")
             bot_score = handCalculator(BotHand)
             print(bot_score)
             PlayerTurn = False
@@ -125,7 +125,7 @@ def runGame():
     while bot_score < 21 and BotTurn and not roundLost:
         if bot_score < 17:
             BotHand = hit(deck, BotHand)
-            print(BotHand)
+            print(f"dealer hand: {BotHand}")
             bot_score = handCalculator(BotHand)
             print(f"Current Dealer score: {bot_score}")
             if bot_score > 21:
