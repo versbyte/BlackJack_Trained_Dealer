@@ -1,1 +1,3 @@
 # BlackJack Trained Dealer
+
+## Development ongoing...
