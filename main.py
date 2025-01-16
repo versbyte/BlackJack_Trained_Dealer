@@ -1,6 +1,6 @@
 import random
 import tkinter as tk
-from tkinter import messagebox
+from tkinter import PhotoImage
 from PIL import Image, ImageTk
 
 # Constants
@@ -30,6 +30,10 @@ root.title("Blackjack")
 root.geometry("800x550")
 root.config(bg = greenColor)
 root.resizable(0, 0)
+window_logo = PhotoImage(file = 'logo.png')
+root.iconphoto(False, window_logo)
+
+
 label_player = tk.Label(root, text="Your Score: 0", bg=greenColor, fg = 'white')
 label_bot = tk.Label(root, text="Dealer Score: 0", bg=greenColor, fg = 'white')
 player_card_frame = tk.Frame(root)
