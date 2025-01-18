@@ -3,6 +3,18 @@ import tkinter as tk
 from tkinter import PhotoImage
 from PIL import Image, ImageTk
 
+r"""
+ __      __           _           _       
+ \ \    / /          | |         | |      
+  \ \  / /__ _ __ ___| |__  _   _| |_ ___ 
+   \ \/ / _ \ '__/ __| '_ \| | | | __/ _ \
+    \  /  __/ |  \__ \ |_) | |_| | ||  __/
+     \/ \___|_|  |___/_.__/ \__, |\__\___|
+                             __/ |        
+                            |___/         
+"""
+
+
 # Constants
 Suits = ['s', 'h', 'c', 'd']
 CardNum = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'A', 'J', 'Q', 'K']
@@ -21,27 +33,34 @@ bot_score = 0
 win_count = 0
 loss_count = 0
 
+next_deal = False
 
 # GUI elements
 greenColor = '#006700'
+window_width = 400
+window_height = 550
 
-root = tk.Tk()
-root.title("Blackjack")
-root.geometry("800x550")
-root.config(bg = greenColor)
-root.resizable(0, 0)
+
+window = tk.Tk()
+window.title("Blackjack")
+window.geometry(f"{window_width}x{window_height}")
+window.config(bg = greenColor)
+window.resizable(0, 0)
 window_logo = PhotoImage(file = 'logo.png')
-root.iconphoto(False, window_logo)
+window.iconphoto(False, window_logo)
 
 
-label_player = tk.Label(root, text="Your Score: 0", bg=greenColor, fg = 'white')
-label_bot = tk.Label(root, text="Dealer Score: 0", bg=greenColor, fg = 'white')
-player_card_frame = tk.Frame(root)
-bot_card_frame = tk.Frame(root)
-hit_button = tk.Button(root, text="Hit",bg = 'white', command=lambda: player_hit())
-stand_button = tk.Button(root, text="Stand",bg = 'white', command=lambda: player_stand())
-label_win_count = tk.Label(root, text=f"Wins: {win_count}", bg=greenColor, fg = 'white')
-label_loss_count = tk.Label(root, text=f"Losses: {loss_count}", bg=greenColor, fg = 'white')
+label_player = tk.Label(window, text="Your Score: 0", bg=greenColor, fg = 'white')
+label_bot = tk.Label(window, text="Dealer Score: 0", bg=greenColor, fg = 'white')
+player_card_frame = tk.Frame(window)
+bot_card_frame = tk.Frame(window)
+
+hit_button = tk.Button(window, text="Hit",bg = 'white', command=lambda: player_hit())
+stand_button = tk.Button(window, text="Stand",bg = 'white', command=lambda: player_stand())
+deal_button = tk.Button(window, text="Deal",bg = 'white', command=lambda: initialize_game())
+
+label_win_count = tk.Label(window, text=f"Wins: {win_count}", bg=greenColor, fg = 'white')
+label_loss_count = tk.Label(window, text=f"Losses: {loss_count}", bg=greenColor, fg = 'white')
 
 # Deck Builder
 def deck_builder():
@@ -120,7 +139,9 @@ def display_cards(hand, frame):
             print(f"Image not found: {image_path}")
 
 def start_new_round():
-    global PlayerHand, BotHand, PlayerTurn, BotTurn, roundLost, Dealerlost, player_score, bot_score
+    global PlayerHand, BotHand, PlayerTurn, BotTurn, roundLost, Dealerlost, player_score, bot_score, next_deal
+    deal_button.config(state= tk.DISABLED)
+    next_deal = False
     PlayerDealing()
     BotDealing()
     PlayerTurn = True
@@ -137,6 +158,10 @@ def start_new_round():
     label_bot.config(text=f"Dealer Score: {bot_score}")
     display_cards(PlayerHand, player_card_frame)
     display_cards(BotHand, bot_card_frame)
+
+def Next_deal():
+    global next_deal
+    next_deal = True
 
 def player_hit():
     global PlayerHand, player_score, PlayerTurn, BotTurn, roundLost
@@ -201,23 +226,28 @@ def check_winner():
         #messagebox.showinfo("Game Over", "Tie")
         print("Tie")
 
-    root.after(1000, start_new_round)  # Wait 1 second before starting the next round
+    #Dealing Button Activated
+    deal_button.config(state= tk.NORMAL)
+    if next_deal:
+        window.after(50, start_new_round)
 
 # Initialize the game
 def initialize_game():
+
     global label_player, label_bot, player_card_frame, bot_card_frame, hit_button, stand_button
     label_bot.pack(pady = 10)
     bot_card_frame.pack(padx = 5, pady= 10)
     player_card_frame.pack(padx = 5, pady= 10)
     label_player.pack(pady = 10)
-    hit_button.pack(padx = 5, pady= 10)
-    stand_button.pack(padx = 5, pady= 10)
+    hit_button.pack(padx = 5, pady= 2.5)
+    stand_button.pack(padx = 5, pady= 2.5)
     label_win_count.place(x = 10, y = 10)
     label_loss_count.place(x = 10, y = 35)
+    deal_button.pack(padx = 5, pady= 2.5)
+    #deal_button.pack(padx = 5, pady= 2.5)
     deck_builder()
     start_new_round()
 
 # Run the game
-
 initialize_game()
-root.mainloop()
+window.mainloop()
